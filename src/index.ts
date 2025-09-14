@@ -17,11 +17,11 @@ async function main() {
 	});
 
 	['SIGINT', 'SIGTERM', 'SIGQUIT']
-  .forEach(signal => process.on(signal, async () => {
+	  .forEach(signal => process.on(signal, async () => {
 		console.log("Shutting down...");
 		await db.close();
-    process.exit();
-  }));
+		process.exit();
+	  }));
 }
 
 main();

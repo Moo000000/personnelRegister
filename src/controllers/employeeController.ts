@@ -9,7 +9,7 @@ export class EmployeeController {
 		const employee = req.body
 		const existingEmployee = await this.employeeRepo.findByEmail(employee.email);
 		if (existingEmployee) {
-			res.status(400).json({ error: "Email already exists"});
+			return res.status(409).json({ error: "Email already exists"});
 		}
 
 		const id = await this.employeeRepo.add(employee);
@@ -25,7 +25,7 @@ export class EmployeeController {
 		res.status(204).send();
 	}
 
-	fetchEmployees = async (req: Request, res: Response) => {
+	fetchEmployees = async (_: any, res: Response) => {
 		const employees = await this.employeeRepo.getAll();
 		res.status(200).json(employees);
 	}
