@@ -1,3 +1,4 @@
+import { EmployeeResponse, EmployeesResponse } from "../models/employee";
 import { EmployeeRepository } from "../repository/employeeRepository";
 import { EmployeeController } from "./employeeController";
 
@@ -25,11 +26,12 @@ describe("EmployeeController", () => {
 
 	it("addEmployee should return 201 when an employee is successfully added", async () => {
 		await controller.addEmployee(req, res);
+		const mockedResponse: EmployeeResponse = { id: mockedAddResponse, ...req.body };
 
 		expect(mockedRepo.findByEmail).toHaveBeenCalledWith(req.body.email);
 		expect(mockedRepo.add).toHaveBeenCalledWith(req.body);
 		expect(res.status).toHaveBeenCalledWith(201);
-		expect(res.json).toHaveBeenCalledWith({ id: mockedAddResponse, ...req.body });
+		expect(res.json).toHaveBeenCalledWith(mockedResponse);
 	});
 
 	it("addEmployee should return 409 when email already exists", async () => {
@@ -60,12 +62,20 @@ describe("EmployeeController", () => {
 	});
 
 	it("fetchEmployees should return 200 when employees are successfully fetched", async () => {
-		mockedRepo.getAll = jest.fn().mockResolvedValue([req.body]);
+		const mockedEmployeesResponse: EmployeesResponse = {
+			employees: [
+				{
+					id: 1,
+					...req.body
+				}
+			]
+		}
+		mockedRepo.getAll = jest.fn().mockResolvedValue(mockedEmployeesResponse.employees);
 
 		await controller.fetchEmployees(req, res);
 
 		expect(mockedRepo.getAll).toHaveBeenCalled();
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith([req.body]);
+		expect(res.json).toHaveBeenCalledWith(mockedEmployeesResponse);
 	});
 })

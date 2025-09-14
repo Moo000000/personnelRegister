@@ -1,13 +1,12 @@
 import { Database } from "sqlite"
 import { createDB } from "./db"
 import { EmployeeRepository } from "./employeeRepository"
-import { Employee } from "../models/employee";
-import { email } from "zod";
+import { AddEmployeeRequest } from "../models/employee";
 
 describe("Employee repository", () => {
 	let db: Database;
 	let repo: EmployeeRepository;
-	let employeeMock: Employee = { email: "test@test.se", name: "testName", lastName: "testLastName" };
+	let employeeMock: AddEmployeeRequest = { email: "test@test.se", name: "testName", lastName: "testLastName" };
 
 	beforeEach(async () => {
 		db = await createDB();

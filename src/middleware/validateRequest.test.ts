@@ -1,5 +1,5 @@
 import { validateRequest } from './validateRequest';
-import { EmployeeSchema } from '../models/employee';
+import { AddEmployeeRequestSchema } from '../models/employee';
 
 describe("validate requests", () => {
 	
@@ -9,7 +9,7 @@ describe("validate requests", () => {
 		const res: any = {};
 		const next = jest.fn();
 
-		validateRequest(EmployeeSchema)(req, res, next);
+		validateRequest(AddEmployeeRequestSchema)(req, res, next);
 		expect(next).toHaveBeenCalled();
 	});
 
@@ -22,7 +22,7 @@ describe("validate requests", () => {
 		};
 		const next = jest.fn();
 
-		validateRequest(EmployeeSchema)(req, res, next);
+		validateRequest(AddEmployeeRequestSchema)(req, res, next);
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalled();

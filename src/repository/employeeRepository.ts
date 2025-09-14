@@ -1,17 +1,17 @@
 import { Database } from 'sqlite';
-import { Employee } from '../models/employee';
+import { AddEmployeeRequest, EmployeeResponse } from '../models/employee';
 
 interface EmployeeRepositoryInterface {
-	add(employee: Employee): Promise<number | undefined>;
+	add(employee: AddEmployeeRequest): Promise<number | undefined>;
 	deleteByEmail(email: string): Promise<boolean>;
-	getAll(): Promise<Employee[]>;
-	findByEmail(email: string): Promise<Employee | undefined>;
+	getAll(): Promise<AddEmployeeRequest[]>;
+	findByEmail(email: string): Promise<AddEmployeeRequest | undefined>;
 }
 
 export class EmployeeRepository implements EmployeeRepositoryInterface {
 	constructor(private db: Database) {}
 
-	async add(employee: Employee): Promise<number | undefined> {
+	async add(employee: AddEmployeeRequest): Promise<number | undefined> {
 		const result = await this.db.run(
 			"INSERT INTO employee (email, name, lastName) VALUES (?, ?, ?)",
 			[employee.email, employee.name, employee.lastName]);
@@ -27,11 +27,11 @@ export class EmployeeRepository implements EmployeeRepositoryInterface {
 		return (!!result.changes && result.changes > 0);
 	}
 
-	async getAll(): Promise<Employee[]> {
-		return await this.db.all<Employee[]>("SELECT email, name, lastName FROM employee");
+	async getAll(): Promise<EmployeeResponse[]> {
+		return await this.db.all<EmployeeResponse[]>("SELECT id, email, name, lastName FROM employee");
 	}
 
-	async findByEmail(email: string): Promise<Employee | undefined> {
-		return await this.db.get<Employee>("SELECT email, name, lastName FROM employee WHERE email = ?", [email]);
+	async findByEmail(email: string): Promise<AddEmployeeRequest | undefined> {
+		return await this.db.get<AddEmployeeRequest>("SELECT email, name, lastName FROM employee WHERE email = ?", [email]);
 	}
 }
